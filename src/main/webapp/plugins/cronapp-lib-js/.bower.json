@@ -1,0 +1,25 @@
+{
+  "name": "cronapp-lib-js",
+  "homepage": "https://github.com/CronApp/cronapp-lib-js",
+  "authors": [
+    "Techne Engenharia e Sistemas <contato@techne.com.br>"
+  ],
+  "description": "Javascript library for CronApp's projects",
+  "main": "cronapp.lib.js",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "_release": "91c686e302",
+  "_resolution": {
+    "type": "commit",
+    "commit": "91c686e302164963223673d3d22b61c2e53c90f8"
+  },
+  "_source": "https://github.com/CronApp/cronapp-lib-js.git",
+  "_target": "91c686e302164963223673d3d22b61c2e53c90f8",
+  "_originalSource": "cronapp-lib-js"
+}

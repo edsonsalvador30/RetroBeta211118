@@ -5,7 +5,7 @@
   var  refreshToken = function($http,success,error) {
     $http({
       method : 'GET',
-      url : 'auth/refresh'
+      url :  'auth/refresh'
     }).success(function(data, status, headers, config) {
       // Store data response on local storage
       localStorage.setItem("_u", JSON.stringify(data));
@@ -29,8 +29,8 @@
     $rootScope.Notification = Notification;
     $rootScope.UploadService = UploadService;
 
-    $rootScope.getReport = function(reportName, params) {
-      ReportService.openReport(reportName, params);
+    $rootScope.getReport = function(reportName, params, config) {
+      ReportService.openReport(reportName, params, config);
     }
 
     $scope.autoLogin = function(){
@@ -50,7 +50,7 @@
     }
     $scope.login = function(user, password, token) {
       $scope.message.error = undefined;
-      if($('form[name="'+this.form.$name+'"]').children('*[class=g-recaptcha]').length){
+      if($('form').children('*[class=g-recaptcha]').length){
         $scope.captcha_token = window.grecaptcha.getResponse();
         if(!$scope.captcha_token != ""){
           window.grecaptcha.execute(function(token){}).then(function(token){
@@ -122,8 +122,8 @@
     $rootScope.Notification = Notification;
     $rootScope.UploadService = UploadService;
 
-    $rootScope.getReport = function(reportName, params) {
-      ReportService.openReport(reportName, params);
+    $rootScope.getReport = function(reportName, params, config) {
+      ReportService.openReport(reportName, params, config);
     }
 
     $scope.message = {};
@@ -250,7 +250,7 @@
       navMain.on("click", "a", closeMenuHandler);
     });
 
-    $scope.themes = [ "cerulean", "cosmo", "cyborg", "darkly", "flatly", "journal", "lumen", "paper", "readable", "sandstone", "simplex", "slate", "spacelab", "superhero", "united", "yeti" ];
+    $scope.themes = [ "material","cerulean", "cosmo", "cyborg", "darkly", "flatly", "journal", "lumen", "paper", "readable", "sandstone", "simplex", "slate", "spacelab", "superhero", "united", "yeti"];
 
     $scope.changeTheme = function(theme) {
       if(theme !== undefined) {

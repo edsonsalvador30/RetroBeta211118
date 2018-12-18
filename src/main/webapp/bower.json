@@ -1,28 +1,30 @@
 {
-	"name": "spring-boot-data-security-angularjs",
-	"homepage": "http://www.techne.com.br",
-	"authors": [
-		"CronosPaas"
-	],
-	"description": "spring-boot-data-security-angularjs",
-	"main": "",
-	"keywords": [
-		"spring-boot",
-		"angularjs"
-	],
-	"license": "MIT",
-	"ignore": [
-		"**/.*",
-		"node_modules",
-		"bower_components",
-		"plugins/",
-		"test",
-		"tests",
-		"package.json",
-		"src"
-	],
-	"dependencies": {
-		"cronapp-framework-js": "0.0.208-b",
-		"cronapi-js": "0.0.134-b"
-	}
+  "name": "spring-boot-data-security-angularjs",
+  "homepage": "http://www.techne.com.br",
+  "authors": [
+    "CronosPaas"
+  ],
+  "description": "spring-boot-data-security-angularjs",
+  "main": "",
+  "keywords": [
+    "spring-boot",
+    "angularjs"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "plugins/",
+    "test",
+    "tests",
+    "package.json",
+    "src"
+  ],
+  "dependencies": {
+    "cronapp-framework-js": "b6ba9c866a243644616cd75b64f6a8f8813b4b2b",
+    "cronapi-js": "60733c056b9820029177f562d9e76f5a4b0a2788",
+    "cronapp-common-js": "6c109dbefec018b63a90a8b76bfd606cd0808f16",
+    "cronapp-lib-js": "91c686e302164963223673d3d22b61c2e53c90f8"
+  }
 }

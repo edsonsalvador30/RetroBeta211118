@@ -16,7 +16,6 @@ var cronappModules = [
   'ngFileUpload',
   'report.services',
   'upload.services',
-  'summernote',
   'ui.tinymce'
 ];
 
@@ -176,21 +175,19 @@ var app = (function() {
         $translateProvider.useStaticFilesLoader({
           files: [
             {
-              prefix: 'i18n/locale_',
-              suffix: '.json'
-            },
-            {
               prefix: 'plugins/cronapp-framework-js/i18n/locale_',
               suffix: '.json'
             }]
         });
 
+        $translateProvider.useLoader('customTranslateLoader', {
+          prefix: 'i18n/locale_',
+          suffix: '.json'
+        });
+
         $translateProvider.registerAvailableLanguageKeys(
-            ['pt_br', 'en_us'], {
-              'en*': 'en_us',
-              'pt*': 'pt_br',
-              '*': 'pt_br'
-            }
+            window.translations.localesKeys,
+            window.translations.localesRef
         );
 
         var locale = (window.navigator.userLanguage || window.navigator.language || 'pt_br').replace('-', '_');
@@ -238,20 +235,29 @@ var app = (function() {
         }
       ])
       // General controller
-      .controller('PageController', function($controller, $scope, $stateParams, $location, $http, $rootScope, $translate) {
+      .controller('PageController', function($controller, $scope, $stateParams, $location, $http, $rootScope, $translate, Notification, UploadService) {
         // save state params into scope
         $scope.params = $stateParams;
         $scope.$http = $http;
+        $scope.Notification = Notification;
+        $scope.UploadService = UploadService;
 
         app.registerEventsCronapi($scope, $translate);
-
-
+        
         // Query string params
         var queryStringParams = $location.search();
         for (var key in queryStringParams) {
           if (queryStringParams.hasOwnProperty(key)) {
             $scope.params[key] = queryStringParams[key];
           }
+        }
+
+        var screenParams = eval($('#starter[data-component="crn-start"]').attr('screen-params'));
+        if (screenParams && screenParams.length) {
+          screenParams.forEach(function(screenParam) {
+            if (!$scope.params[screenParam.key])
+              $scope.params[screenParam.key] = screenParam.value;
+          });
         }
 
         //Components personalization jquery
@@ -349,6 +355,78 @@ app.copyContext = function(fromContext, toContext, controllerName) {
     }
   }
 };
+
+app.factory('customTranslateLoader', function ($http, $q) {
+
+  return function (options) {
+
+    if (!options || (!angular.isArray(options.files) && (!angular.isString(options.prefix) || !angular.isString(options.suffix)))) {
+      throw new Error('Couldn\'t load static files, no files and prefix or suffix specified!');
+    }
+
+    if (!options.files) {
+      options.files = [{
+        prefix: options.prefix,
+        suffix: options.suffix
+      }];
+    }
+
+    var load = function (file) {
+      if (!file || (!angular.isString(file.prefix) || !angular.isString(file.suffix))) {
+        throw new Error('Couldn\'t load static file, no prefix or suffix specified!');
+      }
+
+      var deferred = $q.defer();
+
+      $http(angular.extend({
+        url: [
+          file.prefix,
+          options.key,
+          file.suffix
+        ].join(''),
+        method: 'GET',
+        params: ''
+      }, options.$http)).success(function (data) {
+        deferred.resolve(data);
+      }).error(function (data) {
+        deferred.reject(options.key);
+      });
+
+      return deferred.promise;
+    };
+
+    var deferred = $q.defer(),
+        promises = [],
+        length = options.files.length;
+
+    for (var i = 0; i < length; i++) {
+      promises.push(load({
+        prefix: options.files[i].prefix,
+        key: options.key,
+        suffix: options.files[i].suffix
+      }));
+    }
+
+    $q.all(promises).then(function (data) {
+      data = [data[0]];
+      var length = data.length,
+          mergedData = {};
+
+      for (var i = 0; i < length; i++) {
+        for (var key in data[i]) {
+          mergedData[key] = data[i][key];
+        }
+      }
+
+      deferred.resolve(mergedData);
+    }, function (data) {
+      deferred.reject(data);
+    });
+
+    return deferred.promise;
+  };
+
+});
 
 window.safeApply = function(fn) {
   var phase = this.$root.$$phase;
